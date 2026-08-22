@@ -1,0 +1,32 @@
+{
+  "name": "@trauner/web",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "lint": "echo ok",
+    "test": "echo 'unit via playwright e2e'",
+    "test:e2e": "playwright test"
+  },
+  "dependencies": {
+    "@trauner/shared": "workspace:*",
+    "framer-motion": "^12.23.6",
+    "lucide-react": "^0.525.0",
+    "next": "^15.3.5",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "recharts": "^2.15.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.1",
+    "@types/node": "^24.0.10",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "^5.8.3"
+  }
+}

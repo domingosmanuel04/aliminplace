@@ -1,0 +1,97 @@
+export type PlanKey = 'FREE' | 'STARTER' | 'PRO' | 'BUSINESS' | 'ENTERPRISE';
+
+export interface PlanLimits {
+  products: number;
+  monthlySales: number;
+  storageMb: number;
+  teamMembers: number;
+  domains: number;
+  ai: boolean;
+  automations: boolean;
+  affiliates: boolean;
+  customCheckout: boolean;
+  analyticsAdvanced: boolean;
+}
+
+export const PLANS: Record<PlanKey, { name: string; priceMonthlyAoa: number; limits: PlanLimits }> = {
+  FREE: {
+    name: 'Free',
+    priceMonthlyAoa: 0,
+    limits: {
+      products: 5,
+      monthlySales: 20,
+      storageMb: 500,
+      teamMembers: 1,
+      domains: 0,
+      ai: false,
+      automations: false,
+      affiliates: false,
+      customCheckout: false,
+      analyticsAdvanced: false,
+    },
+  },
+  STARTER: {
+    name: 'Starter',
+    priceMonthlyAoa: 9900,
+    limits: {
+      products: 25,
+      monthlySales: 200,
+      storageMb: 5000,
+      teamMembers: 3,
+      domains: 1,
+      ai: true,
+      automations: true,
+      affiliates: true,
+      customCheckout: true,
+      analyticsAdvanced: false,
+    },
+  },
+  PRO: {
+    name: 'Pro',
+    priceMonthlyAoa: 24900,
+    limits: {
+      products: 100,
+      monthlySales: 2000,
+      storageMb: 25000,
+      teamMembers: 10,
+      domains: 3,
+      ai: true,
+      automations: true,
+      affiliates: true,
+      customCheckout: true,
+      analyticsAdvanced: true,
+    },
+  },
+  BUSINESS: {
+    name: 'Business',
+    priceMonthlyAoa: 59900,
+    limits: {
+      products: 500,
+      monthlySales: 20000,
+      storageMb: 100000,
+      teamMembers: 25,
+      domains: 10,
+      ai: true,
+      automations: true,
+      affiliates: true,
+      customCheckout: true,
+      analyticsAdvanced: true,
+    },
+  },
+  ENTERPRISE: {
+    name: 'Enterprise',
+    priceMonthlyAoa: 0,
+    limits: {
+      products: -1,
+      monthlySales: -1,
+      storageMb: -1,
+      teamMembers: -1,
+      domains: -1,
+      ai: true,
+      automations: true,
+      affiliates: true,
+      customCheckout: true,
+      analyticsAdvanced: true,
+    },
+  },
+};

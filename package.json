@@ -1,0 +1,27 @@
+{
+  "name": "trauner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Trauner — plataforma SaaS multi-tenant para vender produtos digitais e físicos",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "test:e2e": "pnpm --filter @trauner/web test:e2e",
+    "db:generate": "pnpm --filter @trauner/database generate",
+    "db:migrate": "pnpm --filter @trauner/database migrate",
+    "db:migrate:deploy": "pnpm --filter @trauner/database migrate:deploy",
+    "db:seed": "pnpm --filter @trauner/database seed",
+    "db:reset": "pnpm --filter @trauner/database reset",
+    "docker:up": "docker compose up -d postgres redis minio",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f",
+    "infra": "docker compose up -d postgres redis minio && pnpm db:migrate && pnpm db:seed"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.4",
+    "typescript": "^5.8.3"
+  }
+}
