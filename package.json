@@ -6,6 +6,7 @@
   "packageManager": "pnpm@9.15.0",
   "scripts": {
     "dev": "turbo dev",
+    "start:project": "pnpm docker:up && pnpm db:migrate && pnpm dev",
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",
