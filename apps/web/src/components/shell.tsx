@@ -32,7 +32,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   }
   return (
     <div className="min-h-screen md:grid md:grid-cols-[240px_1fr]">
-      <aside className="border-b border-ink/10 bg-ink text-cream md:min-h-screen md:border-b-0 md:border-r md:border-white/5">
+      <aside className="border-b border-[#E5E7EB] bg-[#1E1E1E] text-white md:min-h-screen md:border-b-0 md:border-r md:border-white/10">
         <div className="flex items-center justify-between px-4 py-4 sm:px-5 sm:py-5">
           <Link
             href="/dashboard"
@@ -70,7 +70,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               key={href}
               href={href}
               onClick={() => setIsMenuOpen(false)}
-              className={`rounded-xl px-3 py-3 text-sm ${path === href ? "bg-gold text-ink" : "text-cream/70 hover:bg-white/5"}`}
+              className={`rounded-xl px-3 py-3 text-sm transition ${path === href ? "bg-[#E31D1D] text-white" : "text-white/70 hover:bg-white/10 hover:text-white"}`}
             >
               {label}
             </Link>
@@ -78,13 +78,13 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <Link
             href="/members"
             onClick={() => setIsMenuOpen(false)}
-            className="rounded-xl px-3 py-3 text-sm text-cream/50"
+            className="rounded-xl px-3 py-3 text-sm text-white/60 transition hover:bg-white/10 hover:text-white"
           >
             Área de membros
           </Link>
           <button
             onClick={logout}
-            className="rounded-xl px-3 py-3 text-left text-sm text-cream/50"
+            className="rounded-xl px-3 py-3 text-left text-sm text-white/60 transition hover:bg-white/10 hover:text-white"
           >
             Sair
           </button>

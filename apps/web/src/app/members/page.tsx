@@ -79,7 +79,7 @@ export default function MembersPage() {
   );
 
   return (
-    <main className="min-h-screen bg-[#f6f1e8]">
+    <main className="min-h-screen bg-[#F3F4F6]">
       <header className="border-b border-ink/10 bg-cream/80">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-5 sm:px-6">
           <Link
