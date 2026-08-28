@@ -274,6 +274,30 @@ Antes de criar um novo componente, procurar se já existe um equivalente.
 
 Se existir, reutilizar.
 
+## Regra de cores
+
+Por padrão, utilizar exclusivamente as cores definidas no Design System
+do projeto e utilizadas na página inicial.
+
+Não criar ou introduzir novas cores por iniciativa própria.
+
+### Exceções
+
+Uma nova cor só pode ser utilizada quando o utilizador solicitar
+explicitamente.
+
+Quando o utilizador solicitar uma nova cor:
+
+1. Utilizar exatamente a cor solicitada.
+2. Não substituir a cor por outra semelhante.
+3. Aplicar a nova cor apenas onde foi solicitado.
+4. Não alterar a paleta principal do projeto.
+5. Não substituir as cores existentes globalmente, salvo se o utilizador
+   solicitar explicitamente.
+6. Se a nova cor precisar ser adicionada ao Design System, informar o
+   utilizador antes de fazer uma alteração global.
+
+
 ---
 
 # 10. Consistência visual

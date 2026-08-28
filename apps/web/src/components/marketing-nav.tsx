@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, X } from "lucide-react";
+import { LogIn, Menu, UserPlus, X } from "lucide-react";
 import { useState } from "react";
 
 export function MarketingNav() {
@@ -25,9 +25,11 @@ export function MarketingNav() {
           <div className="order-2 ml-auto flex items-center md:order-3 md:ml-0 md:justify-self-end">
             <div className="mr-3 hidden items-center gap-3 md:flex">
               <Link href="/login" className="btn-ghost px-3 sm:px-5">
+                <LogIn size={16} aria-hidden="true" />
                 Entrar
               </Link>
               <Link href="/register" className="btn-primary px-3 sm:px-5">
+                <UserPlus size={16} aria-hidden="true" />
                 Começar gratuitamente
               </Link>
             </div>
@@ -57,12 +59,14 @@ export function MarketingNav() {
             <Link href="/pricing">Planos</Link>
             <div className="flex w-full flex-col gap-2 border-t border-ink/5 pt-4 md:hidden">
               <Link href="/login" className="btn-ghost w-full px-3 sm:px-5">
+                <LogIn size={16} aria-hidden="true" />
                 Entrar
               </Link>
               <Link
                 href="/register"
                 className="btn-primary w-full px-3 sm:px-5"
               >
+                <UserPlus size={16} aria-hidden="true" />
                 Começar
               </Link>
             </div>

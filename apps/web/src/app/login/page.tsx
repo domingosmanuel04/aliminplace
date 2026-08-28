@@ -5,8 +5,8 @@ import { useState } from "react";
 import { api, setTenant } from "@/lib/api";
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("ana@atlasfit.ao");
-  const [password, setPassword] = useState("Seller@123!");
+  const [email, setEmail] = useState("emma.t@example.net");
+  const [password, setPassword] = useState("Admin@123!");
   const [error, setError] = useState("");
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -16,10 +16,14 @@ export default function LoginPage() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
+      if (data.user?.isSuperAdmin) {
+        localStorage.removeItem("tenantId");
+        window.location.href = "/admin";
+        return;
+      }
       if (data.memberships?.[0]?.tenantId)
         setTenant(data.memberships[0].tenantId);
-      if (data.user?.isSuperAdmin) window.location.href = "/admin";
-      else if (data.memberships?.length) window.location.href = "/dashboard";
+      if (data.memberships?.length) window.location.href = "/dashboard";
       else window.location.href = "/onboarding";
     } catch (err: any) {
       setError(err.message);
