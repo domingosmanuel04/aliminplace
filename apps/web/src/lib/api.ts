@@ -17,11 +17,16 @@ export async function api<T = any>(
 ): Promise<T> {
   const tenant =
     typeof window !== "undefined" ? localStorage.getItem("tenantId") : null;
+  const accessToken =
+    typeof window !== "undefined" ? localStorage.getItem("accessToken") : null;
+  const isFormData =
+    typeof FormData !== "undefined" && init.body instanceof FormData;
   const res = await fetch(`${API}${path}`, {
     ...init,
     credentials: "include",
     headers: {
-      "Content-Type": "application/json",
+      ...(isFormData ? {} : { "Content-Type": "application/json" }),
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...(tenant ? { "x-tenant-id": tenant } : {}),
       ...(init.headers || {}),
     },

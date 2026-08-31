@@ -1050,6 +1050,7 @@ model Lesson {
   type         String       @default("video")
   content      String?
   videoUrl     String?
+  videoUrls    Json         @default("[]")
   durationSec  Int          @default(0)
   downloadable Boolean      @default(false)
   position     Int

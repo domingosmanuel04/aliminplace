@@ -1,6 +1,36 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { MarketingNav } from "@/components/marketing-nav";
+
+const slides = [
+  {
+    image:
+      "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=85",
+    eyebrow: "Comércio · Cursos · Assinaturas",
+    title: "Crie. Venda. Cresça.",
+    subtitle:
+      "A plataforma angolana para vender produtos, cursos e serviços online.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1800&q=85",
+    eyebrow: "Loja digital pronta",
+    title: "A tua marca online em poucos minutos.",
+    subtitle:
+      "Publica produtos, controla stock e oferece uma experiência premium ao cliente.",
+  },
+  {
+    image:
+      "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1800&q=85",
+    eyebrow: "Vendas e crescimento",
+    title: "Transforma atenção em faturação.",
+    subtitle:
+      "Acompanhe métricas reais, campanhas e comissões no mesmo painel.",
+  },
+];
 
 const pillars = [
   {
@@ -46,45 +76,94 @@ const faqs = [
 ];
 
 export default function HomePage() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % slides.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="overflow-hidden">
       <MarketingNav />
       <main>
         <section className="relative isolate overflow-hidden bg-[#1E1E1E] text-white">
-          <Image
-            src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=85"
-            alt="Pessoa a gerir uma loja digital num portátil e telemóvel"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover"
-          />
+          {slides.map((slide, index) => (
+            <div
+              key={slide.title}
+              className={`absolute inset-0 transition-opacity duration-700 ${
+                index === activeIndex ? "opacity-100" : "opacity-0"
+              }`}
+            >
+              <Image
+                src={slide.image}
+                alt={slide.title}
+                fill
+                priority={index === 0}
+                sizes="100vw"
+                className="object-cover"
+              />
+            </div>
+          ))}
           <div className="absolute inset-0 bg-gradient-to-r from-[#14110F]/95 via-[#14110F]/75 to-[#14110F]/20" />
           <div className="relative mx-auto grid min-h-[38rem] max-w-6xl items-center px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-2">
-            <div className="max-w-2xl drop-shadow-[0_8px_24px_rgba(0,0,0,0.65)]">
-              <p className="mb-5 inline-flex rounded-full bg-[#E31D1D] px-3 py-1.5 text-xs uppercase tracking-[0.2em] text-white shadow-[0_8px_24px_rgba(227,29,29,0.35)]">
-                Comércio · Cursos · Assinaturas
-              </p>
-              <h1 className="serif max-w-4xl text-4xl leading-[1.05] text-white drop-shadow-[0_3px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:text-7xl">
-                Crie. Venda. Cresça.
-                <br />
-                Sem limites.
-              </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-white/85 sm:mt-6 sm:text-lg">
-                A plataforma angolana para vender produtos, cursos e serviços
-                online.
-              </p>
-              <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
-                <Link href="/register" className="btn-primary w-full sm:w-auto">
-                  Começar agora
-                </Link>
-                <Link href="/marketplace" className="btn-gold w-full sm:w-auto">
-                  Ver marketplace
-                </Link>
+            {slides.map((slide, index) => (
+              <div
+                key={slide.title}
+                className={`max-w-2xl drop-shadow-[0_8px_24px_rgba(0,0,0,0.65)] transition-all duration-700 ${
+                  index === activeIndex
+                    ? "translate-x-0 opacity-100"
+                    : "pointer-events-none absolute left-4 top-1/2 -translate-x-6 -translate-y-1/2 opacity-0"
+                }`}
+                aria-hidden={index !== activeIndex}
+              >
+                <p className="mb-5 inline-flex rounded-full bg-[#E31D1D] px-3 py-1.5 text-xs uppercase tracking-[0.2em] text-white shadow-[0_8px_24px_rgba(227,29,29,0.35)]">
+                  {slide.eyebrow}
+                </p>
+                <h1 className="serif max-w-4xl text-4xl leading-[1.05] text-white drop-shadow-[0_3px_12px_rgba(0,0,0,0.55)] sm:text-5xl md:text-7xl">
+                  {slide.title}
+                  <br />
+                  Sem limites.
+                </h1>
+                <p className="mt-5 max-w-2xl text-base leading-7 text-white/85 sm:mt-6 sm:text-lg">
+                  {slide.subtitle}
+                </p>
+                <div className="mt-7 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
+                  <Link
+                    href="/register"
+                    className="btn-primary w-full sm:w-auto"
+                  >
+                    Começar agora
+                  </Link>
+                  <Link
+                    href="/marketplace"
+                    className="btn-gold w-full sm:w-auto"
+                  >
+                    Ver marketplace
+                  </Link>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
-          <div className="absolute bottom-8 right-8 hidden h-3 w-3 rounded-full bg-[#E31D1D] shadow-[0_0_0_6px_rgba(227,29,29,0.2)] sm:block" />
+
+          <div className="absolute bottom-8 left-1/2 flex -translate-x-1/2 items-center gap-3">
+            {slides.map((slide, index) => (
+              <button
+                key={slide.title}
+                type="button"
+                aria-label={`Ver slide ${index + 1}`}
+                onClick={() => setActiveIndex(index)}
+                className={`h-2.5 rounded-full transition-all ${
+                  index === activeIndex
+                    ? "w-8 bg-[#E31D1D]"
+                    : "w-2.5 bg-white/55"
+                }`}
+              />
+            ))}
+          </div>
         </section>
         <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20">
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">

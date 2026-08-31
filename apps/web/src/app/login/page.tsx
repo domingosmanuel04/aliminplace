@@ -16,6 +16,8 @@ export default function LoginPage() {
         method: "POST",
         body: JSON.stringify({ email, password }),
       });
+      if (data.accessToken)
+        localStorage.setItem("accessToken", data.accessToken);
       if (data.user?.isSuperAdmin) {
         localStorage.removeItem("tenantId");
         window.location.href = "/admin";

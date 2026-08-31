@@ -10,6 +10,8 @@ type Lesson = {
   title: string;
   type: string;
   content: string;
+  videoUrl?: string;
+  videoUrls?: string[];
   durationSec: number;
 };
 type CourseModule = { title: string; lessons: Lesson[] };
@@ -18,6 +20,8 @@ const emptyLesson = (): Lesson => ({
   title: "",
   type: "video",
   content: "",
+  videoUrl: "",
+  videoUrls: [],
   durationSec: 0,
 });
 const emptyModule = (): CourseModule => ({
@@ -37,6 +41,16 @@ export default function NewCoursePage() {
   const [isSaving, setIsSaving] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  async function uploadMedia(file: File) {
+    const formData = new FormData();
+    formData.append("file", file);
+    const upload = await api<{ url: string }>("/media/upload", {
+      method: "POST",
+      body: formData,
+    });
+    return upload.url;
+  }
 
   function updateModule(moduleIndex: number, value: Partial<CourseModule>) {
     setModules((current) =>
@@ -121,9 +135,25 @@ export default function NewCoursePage() {
           marketplaceVisible: true,
         }),
       });
+
       await api(`/courses/${course.id}/curriculum`, {
         method: "POST",
-        body: JSON.stringify({ modules }),
+        body: JSON.stringify({
+          modules: modules.map((module) => ({
+            ...module,
+            lessons: module.lessons.map((lesson) => ({
+              ...lesson,
+              videoUrl:
+                lesson.videoUrl || lesson.videoUrls?.[0] || lesson.content,
+              videoUrls:
+                lesson.videoUrls && lesson.videoUrls.length > 0
+                  ? lesson.videoUrls
+                  : lesson.videoUrl
+                    ? [lesson.videoUrl]
+                    : [],
+            })),
+          })),
+        }),
       });
       setMessage(`Curso “${course.name}” publicado com sucesso.`);
     } catch (submissionError) {
@@ -240,18 +270,40 @@ export default function NewCoursePage() {
               </div>
               <div>
                 <label className="label" htmlFor="imageUrl">
-                  URL da capa
+                  Capa do curso
                 </label>
                 <input
                   id="imageUrl"
-                  className="input"
-                  type="url"
-                  value={form.imageUrl}
-                  onChange={(event) =>
-                    setForm({ ...form, imageUrl: event.target.value })
-                  }
-                  placeholder="https://..."
+                  className="input file:mr-4 file:rounded-full file:border-0 file:bg-forest file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
+                  type="file"
+                  accept="image/*"
+                  onChange={async (event) => {
+                    const file = event.target.files?.[0];
+                    if (!file) return;
+                    try {
+                      const imageUrl = await uploadMedia(file);
+                      setForm((current) => ({ ...current, imageUrl }));
+                    } catch (uploadError) {
+                      setError(
+                        uploadError instanceof Error
+                          ? uploadError.message
+                          : "Não foi possível carregar a capa.",
+                      );
+                    }
+                  }}
                 />
+                <p className="mt-2 text-xs text-ink/50">
+                  Pode também colar uma URL se preferir.
+                </p>
+                {form.imageUrl && (
+                  <div className="mt-3 overflow-hidden rounded-xl border border-ink/10 bg-ink/5">
+                    <img
+                      src={form.imageUrl}
+                      alt="Pré-visualização da capa do curso"
+                      className="h-32 w-full object-cover"
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </section>
@@ -377,6 +429,66 @@ export default function NewCoursePage() {
                             }
                             placeholder="Cole o conteúdo da aula ou o link do vídeo"
                           />
+                        </div>
+                        <div className="sm:col-span-3">
+                          <label
+                            className="label"
+                            htmlFor={`video-${moduleIndex}-${lessonIndex}`}
+                          >
+                            Vídeo(s) da aula
+                          </label>
+                          <input
+                            id={`video-${moduleIndex}-${lessonIndex}`}
+                            className="input file:mr-4 file:rounded-full file:border-0 file:bg-forest file:px-4 file:py-2 file:text-sm file:font-medium file:text-white"
+                            type="file"
+                            accept="video/*"
+                            multiple
+                            onChange={async (event) => {
+                              const files = event.target.files;
+                              if (!files || files.length === 0) return;
+                              const uploadedVideoUrls: string[] = [];
+                              for (const file of Array.from(files)) {
+                                const formData = new FormData();
+                                formData.append("file", file);
+                                const upload = await api<{ url: string }>(
+                                  "/media/upload",
+                                  {
+                                    method: "POST",
+                                    body: formData,
+                                  },
+                                );
+                                uploadedVideoUrls.push(upload.url);
+                              }
+                              const merged = [
+                                ...(lesson.videoUrls || []),
+                                ...uploadedVideoUrls,
+                              ];
+                              updateLesson(moduleIndex, lessonIndex, {
+                                videoUrls: merged,
+                                videoUrl: merged[0] || "",
+                              });
+                            }}
+                          />
+                          {(lesson.videoUrls?.length || lesson.videoUrl) && (
+                            <div className="mt-4 space-y-3">
+                              <p className="text-xs font-medium uppercase tracking-[0.14em] text-forest/70">
+                                Pré-visualização
+                              </p>
+                              {(lesson.videoUrls && lesson.videoUrls.length > 0
+                                ? lesson.videoUrls
+                                : lesson.videoUrl
+                                  ? [lesson.videoUrl]
+                                  : []
+                              ).map((videoUrl, videoIndex) => (
+                                <video
+                                  key={`${moduleIndex}-${lessonIndex}-${videoIndex}`}
+                                  controls
+                                  className="w-full rounded-xl border border-ink/10 bg-black"
+                                  src={videoUrl}
+                                />
+                              ))}
+                            </div>
+                          )}
                         </div>
                       </div>
                     ))}

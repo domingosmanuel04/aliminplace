@@ -12,10 +12,12 @@ export default function RegisterPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     try {
-      await api("/auth/register", {
+      const data = await api<{ accessToken?: string }>("/auth/register", {
         method: "POST",
         body: JSON.stringify({ name, email, password }),
       });
+      if (data.accessToken)
+        localStorage.setItem("accessToken", data.accessToken);
       window.location.href = "/onboarding";
     } catch (err: any) {
       setError(err.message);

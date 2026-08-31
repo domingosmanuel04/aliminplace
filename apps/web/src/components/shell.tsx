@@ -28,6 +28,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   async function logout() {
     await api("/auth/logout", { method: "POST" });
+    localStorage.removeItem("accessToken");
     window.location.href = "/";
   }
   return (

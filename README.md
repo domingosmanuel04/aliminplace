@@ -1,4 +1,4 @@
-# Trauner
+# Aluniplace
 
 Plataforma SaaS multi-tenant para vender **produtos digitais e físicos**: lojas, checkout, pagamentos, cursos, afiliados, assinaturas e IA de vendas.
 

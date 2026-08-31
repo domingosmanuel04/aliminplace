@@ -1,20 +1,45 @@
-import { Body, Controller, Get, Inject, Param, Post, Query } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
-import { PrismaService } from '../../prisma/prisma.service';
-import { Public } from '../../common/decorators';
-import { ctx } from '../../common/als';
+import {
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Query,
+  UploadedFile,
+  UseInterceptors,
+} from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { ApiTags } from "@nestjs/swagger";
+import { PrismaService } from "../../prisma/prisma.service";
+import { Public } from "../../common/decorators";
+import { ctx } from "../../common/als";
+import { StorageService } from "./storage.service";
 
-@ApiTags('misc')
+@ApiTags("misc")
 @Controller()
 export class MiscController {
-  constructor(@Inject(PrismaService) private prisma: PrismaService) {}
+  constructor(
+    @Inject(PrismaService) private prisma: PrismaService,
+    @Inject(StorageService) private storage: StorageService,
+  ) {}
+
+  @Post("media/upload")
+  @UseInterceptors(FileInterceptor("file"))
+  async uploadMedia(@UploadedFile() file: Express.Multer.File) {
+    if (!file) throw new Error("Arquivo obrigatório");
+    const allowed = ["image/", "video/"];
+    const isAllowed = allowed.some((type) => file.mimetype.startsWith(type));
+    if (!isAllowed) throw new Error("Tipo de arquivo não suportado");
+    return this.storage.uploadFile(file, "media");
+  }
 
   @Public()
-  @Get('marketplace')
+  @Get("marketplace")
   marketplace(@Query() q: any) {
     return this.prisma.product.findMany({
       where: {
-        status: 'PUBLISHED',
+        status: "PUBLISHED",
         marketplaceVisible: true,
         type: q.type || undefined,
         price: {
@@ -23,41 +48,45 @@ export class MiscController {
         },
       },
       include: { media: true, store: true, category: true },
-      orderBy: q.sort === 'new' ? { publishedAt: 'desc' } : { salesCount: 'desc' },
+      orderBy:
+        q.sort === "new" ? { publishedAt: "desc" } : { salesCount: "desc" },
       take: 48,
     });
   }
 
   @Public()
-  @Get('health')
+  @Get("health")
   health() {
-    return { ok: true, service: 'trauner-api', time: new Date().toISOString() };
+    return { ok: true, service: "trauner-api", time: new Date().toISOString() };
   }
 
-  @Get('notifications')
+  @Get("notifications")
   notifications() {
     return this.prisma.notification.findMany({
       where: { userId: ctx().userId },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
       take: 30,
     });
   }
 
-  @Post('notifications/:id/read')
-  async read(@Param('id') id: string) {
-    return this.prisma.notification.update({ where: { id }, data: { readAt: new Date() } });
+  @Post("notifications/:id/read")
+  async read(@Param("id") id: string) {
+    return this.prisma.notification.update({
+      where: { id },
+      data: { readAt: new Date() },
+    });
   }
 
-  @Get('tickets')
+  @Get("tickets")
   tickets() {
     return this.prisma.ticket.findMany({
       where: { OR: [{ authorId: ctx().userId }, { tenantId: ctx().tenantId }] },
       include: { replies: true, author: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
   }
 
-  @Post('tickets')
+  @Post("tickets")
   createTicket(@Body() body: any) {
     return this.prisma.ticket.create({
       data: {
@@ -69,14 +98,14 @@ export class MiscController {
     });
   }
 
-  @Post('tickets/:id/replies')
-  reply(@Param('id') id: string, @Body() body: any) {
+  @Post("tickets/:id/replies")
+  reply(@Param("id") id: string, @Body() body: any) {
     return this.prisma.ticketReply.create({
       data: { ticketId: id, authorId: ctx().userId!, body: body.body },
     });
   }
 
-  @Get('team')
+  @Get("team")
   team() {
     return this.prisma.teamMember.findMany({
       where: { tenantId: ctx().tenantId },
@@ -84,31 +113,47 @@ export class MiscController {
     });
   }
 
-  @Post('team')
-  async invite(@Body() body: { email: string; role: any; permissions?: string[] }) {
-    let user = await this.prisma.user.findUnique({ where: { email: body.email.toLowerCase() } });
+  @Post("team")
+  async invite(
+    @Body() body: { email: string; role: any; permissions?: string[] },
+  ) {
+    let user = await this.prisma.user.findUnique({
+      where: { email: body.email.toLowerCase() },
+    });
     if (!user) {
       user = await this.prisma.user.create({
         data: {
           email: body.email.toLowerCase(),
-          name: body.email.split('@')[0],
-          passwordHash: await (await import('argon2')).hash('Convite@123!', { type: 2 }),
+          name: body.email.split("@")[0],
+          passwordHash: await (
+            await import("argon2")
+          ).hash("Convite@123!", { type: 2 }),
         },
       });
     }
     return this.prisma.teamMember.upsert({
-      where: { tenantId_userId: { tenantId: ctx().tenantId!, userId: user.id } },
+      where: {
+        tenantId_userId: { tenantId: ctx().tenantId!, userId: user.id },
+      },
       update: { role: body.role, permissions: body.permissions || [] },
-      create: { tenantId: ctx().tenantId!, userId: user.id, role: body.role, permissions: body.permissions || [] },
+      create: {
+        tenantId: ctx().tenantId!,
+        userId: user.id,
+        role: body.role,
+        permissions: body.permissions || [],
+      },
     });
   }
 
-  @Get('webhooks')
+  @Get("webhooks")
   webhooks() {
-    return this.prisma.webhook.findMany({ where: { tenantId: ctx().tenantId }, include: { deliveries: { take: 10, orderBy: { createdAt: 'desc' } } } });
+    return this.prisma.webhook.findMany({
+      where: { tenantId: ctx().tenantId },
+      include: { deliveries: { take: 10, orderBy: { createdAt: "desc" } } },
+    });
   }
 
-  @Post('webhooks')
+  @Post("webhooks")
   createWebhook(@Body() body: any) {
     return this.prisma.webhook.create({
       data: {
@@ -120,16 +165,16 @@ export class MiscController {
     });
   }
 
-  @Post('webhooks/deliveries/:id/replay')
-  async replay(@Param('id') id: string) {
+  @Post("webhooks/deliveries/:id/replay")
+  async replay(@Param("id") id: string) {
     const d = await this.prisma.webhookDelivery.update({
       where: { id },
-      data: { attempts: { increment: 1 }, lastError: 'replayed' },
+      data: { attempts: { increment: 1 }, lastError: "replayed" },
     });
     return d;
   }
 
-  @Get('inventory')
+  @Get("inventory")
   inventory() {
     return this.prisma.inventory.findMany({
       where: { warehouse: { tenantId: ctx().tenantId } },
@@ -137,34 +182,44 @@ export class MiscController {
     });
   }
 
-  @Post('inventory/adjust')
-  async adjust(@Body() body: { inventoryId: string; quantity: number; reason?: string }) {
+  @Post("inventory/adjust")
+  async adjust(
+    @Body() body: { inventoryId: string; quantity: number; reason?: string },
+  ) {
     const inv = await this.prisma.inventory.update({
       where: { id: body.inventoryId },
       data: { quantity: body.quantity },
     });
     await this.prisma.inventoryMovement.create({
-      data: { inventoryId: inv.id, type: 'ADJUSTMENT', quantity: body.quantity, reason: body.reason },
+      data: {
+        inventoryId: inv.id,
+        type: "ADJUSTMENT",
+        quantity: body.quantity,
+        reason: body.reason,
+      },
     });
     return inv;
   }
 
-  @Get('reviews')
+  @Get("reviews")
   reviews() {
     return this.prisma.review.findMany({
       where: { product: { tenantId: ctx().tenantId } },
       include: { product: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
   }
 
-  @Post('reviews/:id/moderate')
-  moderate(@Param('id') id: string, @Body() body: { moderated: boolean }) {
-    return this.prisma.review.update({ where: { id }, data: { moderated: body.moderated } });
+  @Post("reviews/:id/moderate")
+  moderate(@Param("id") id: string, @Body() body: { moderated: boolean }) {
+    return this.prisma.review.update({
+      where: { id },
+      data: { moderated: body.moderated },
+    });
   }
 
   @Public()
-  @Post('reviews')
+  @Post("reviews")
   createReview(@Body() body: any) {
     return this.prisma.review.create({
       data: {
@@ -179,17 +234,19 @@ export class MiscController {
     });
   }
 
-  @Get('account/orders')
+  @Get("account/orders")
   async myOrders() {
-    const user = await this.prisma.user.findUnique({ where: { id: ctx().userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: ctx().userId },
+    });
     return this.prisma.order.findMany({
       where: { customer: { email: user?.email } },
       include: { items: true, store: true, payments: true },
-      orderBy: { createdAt: 'desc' },
+      orderBy: { createdAt: "desc" },
     });
   }
 
-  @Get('subscriptions')
+  @Get("subscriptions")
   subscriptions() {
     return this.prisma.subscription.findMany({
       where: { tenantId: ctx().tenantId },
@@ -197,20 +254,26 @@ export class MiscController {
     });
   }
 
-  @Post('subscriptions/:id/cancel')
-  cancelSub(@Param('id') id: string) {
+  @Post("subscriptions/:id/cancel")
+  cancelSub(@Param("id") id: string) {
     return this.prisma.subscription.update({
       where: { id },
-      data: { cancelAtPeriodEnd: true, cancelledAt: new Date(), status: 'CANCELLED' },
+      data: {
+        cancelAtPeriodEnd: true,
+        cancelledAt: new Date(),
+        status: "CANCELLED",
+      },
     });
   }
 
-  @Get('shipping')
-  shipping(@Query('storeId') storeId: string) {
-    return this.prisma.shippingMethod.findMany({ where: { storeId, active: true } });
+  @Get("shipping")
+  shipping(@Query("storeId") storeId: string) {
+    return this.prisma.shippingMethod.findMany({
+      where: { storeId, active: true },
+    });
   }
 
-  @Post('domains')
+  @Post("domains")
   domains(@Body() body: any) {
     return this.prisma.domain.create({
       data: {
@@ -218,16 +281,20 @@ export class MiscController {
         storeId: body.storeId,
         host: body.host,
         txtToken: `trauner-verify-${Math.random().toString(36).slice(2, 8)}`,
-        isSubdomain: !body.host.includes('.'),
+        isSubdomain: !body.host.includes("."),
       },
     });
   }
 
-  @Post('domains/:id/verify')
-  verifyDomain(@Param('id') id: string) {
+  @Post("domains/:id/verify")
+  verifyDomain(@Param("id") id: string) {
     return this.prisma.domain.update({
       where: { id },
-      data: { status: 'ACTIVE', verifiedAt: new Date(), sslIssuedAt: new Date() },
+      data: {
+        status: "ACTIVE",
+        verifiedAt: new Date(),
+        sslIssuedAt: new Date(),
+      },
     });
   }
 }
