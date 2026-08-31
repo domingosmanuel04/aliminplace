@@ -208,8 +208,8 @@ export class AiService {
   async copy(kind: string, brief: string) {
     const map: Record<string, string> = {
       product: `${brief}\n\nFeito para quem quer resultado concreto, com entrega imediata e suporte em português.`,
-      ad: `Pare de improvisar. ${brief} — comece hoje na Trauner.`,
-      email: `Olá,\n\nNotámos que ${brief}. Reserve os seus 15 minutos e conclua a compra com 10% extra.\n\nEquipa Trauner`,
+      ad: `Pare de improvisar. ${brief} — comece hoje na Aluniplace.`,
+      email: `Olá,\n\nNotámos que ${brief}. Reserve os seus 15 minutos e conclua a compra com 10% extra.\n\nEquipa Aluniplace`,
       page: `# ${brief}\n\nUma oferta directa, honesta e pronta a vender.`,
     };
     return { text: map[kind] || map.product };

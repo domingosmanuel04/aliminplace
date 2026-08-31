@@ -11,7 +11,7 @@ function daysAgo(n: number) {
 }
 
 async function main() {
-  console.log('Seeding Trauner…');
+  console.log('Seeding Aluniplace…');
 
   await prisma.platformFee.createMany({
     data: [
@@ -35,7 +35,7 @@ async function main() {
 
   await prisma.platformBanner.create({
     data: {
-      title: 'Black Friday Trauner',
+      title: 'Black Friday Aluniplace',
       body: 'Taxas reduzidas para vendedores Pro até 30 de Novembro.',
       href: '/pricing',
       active: true,

@@ -4,14 +4,14 @@ import { CardReveal } from "@/components/card-reveal";
 
 export const metadata: Metadata = {
   title: {
-    default: "Trauner — Venda qualquer coisa. Em qualquer lugar.",
-    template: "%s · Trauner",
+    default: "Aluniplace — Venda qualquer coisa. Em qualquer lugar.",
+    template: "%s · Aluniplace",
   },
   description:
     "Plataforma completa para criar loja, vender produtos, cursos, serviços e assinaturas.",
   metadataBase: new URL(process.env.APP_URL || "http://localhost:3000"),
   openGraph: {
-    title: "Trauner",
+    title: "Aluniplace",
     description: "Infraestrutura de vendas para Angola e o mundo.",
   },
 };

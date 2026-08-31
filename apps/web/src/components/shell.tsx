@@ -37,12 +37,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="flex items-center justify-between px-4 py-4 sm:px-5 sm:py-5">
           <Link
             href="/dashboard"
-            aria-label="Trauner"
+            aria-label="Aluniplace"
             className="flex items-center rounded-lg bg-white px-2 py-1"
           >
             <Image
               src="/logo.png"
-              alt="Trauner"
+              alt="Aluniplace"
               width={168}
               height={48}
               className="h-8 w-auto object-contain"

@@ -12,10 +12,10 @@ export function MarketingNav() {
     <>
       <header className="fixed inset-x-0 top-0 z-30 border-b border-ink/5 bg-cream/80 backdrop-blur">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-3 px-4 py-3 sm:px-6 sm:py-4 md:grid md:grid-cols-[1fr_auto_1fr] md:gap-6">
-          <Link href="/" aria-label="Trauner" className="flex items-center">
+          <Link href="/" aria-label="Aluniplace" className="flex items-center">
             <Image
               src="/logo.png"
-              alt="Trauner"
+              alt="Aluniplace"
               width={168}
               height={48}
               className="h-8 w-auto object-contain sm:h-10"

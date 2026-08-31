@@ -33,10 +33,10 @@ export default function LoginPage() {
   }
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-6">
-      <Link href="/" aria-label="Trauner" className="mb-8 flex items-center">
+      <Link href="/" aria-label="Aluniplace" className="mb-8 flex items-center">
         <Image
           src="/logo.png"
-          alt="Trauner"
+          alt="Aluniplace"
           width={200}
           height={58}
           className="h-12 w-auto object-contain"

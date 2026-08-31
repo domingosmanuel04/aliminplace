@@ -37,9 +37,9 @@ async function bootstrap() {
   );
 
   const swagger = new DocumentBuilder()
-    .setTitle("Trauner API")
+    .setTitle("Aluniplace API")
     .setDescription(
-      "API REST da plataforma Trauner — lojas, produtos, checkout, pagamentos, cursos, afiliados.",
+      "API REST da plataforma Aluniplace — lojas, produtos, checkout, pagamentos, cursos, afiliados.",
     )
     .setVersion("1.0.0")
     .addBearerAuth()
@@ -49,7 +49,7 @@ async function bootstrap() {
 
   const port = Number(process.env.PORT || 4000);
   await app.listen(port, "0.0.0.0");
-  console.log(`Trauner API http://localhost:${port}/v1  docs: /docs`);
+  console.log(`Aluniplace API http://localhost:${port}/v1  docs: /docs`);
 }
 
 bootstrap();

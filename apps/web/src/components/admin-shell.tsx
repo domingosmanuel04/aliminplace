@@ -63,7 +63,7 @@ export function AdminShell({
           >
             <Image
               src="/logo.png"
-              alt="Trauner"
+              alt="Aluniplace"
               width={160}
               height={44}
               className="h-8 w-auto object-contain"

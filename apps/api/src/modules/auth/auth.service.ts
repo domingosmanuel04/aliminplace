@@ -146,7 +146,7 @@ export class AuthService {
       where: { id: userId },
       data: { twoFactorSecret: secret },
     });
-    const otpauth = authenticator.keyuri("user", "Trauner", secret);
+    const otpauth = authenticator.keyuri("user", "Aluniplace", secret);
     return { secret, otpauth };
   }
 
@@ -201,7 +201,7 @@ export class AuthService {
                   {
                     type: "hero",
                     title: input.storeName,
-                    subtitle: "A sua nova loja Trauner",
+                    subtitle: "A sua nova loja Aluniplace",
                     cta: "Ver produtos",
                   },
                   { type: "products", source: "all" },

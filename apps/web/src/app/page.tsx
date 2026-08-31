@@ -58,7 +58,7 @@ const pillars = [
 
 const faqs = [
   {
-    q: "O que posso vender na Trauner?",
+    q: "O que posso vender na Aluniplace?",
     a: "Produtos digitais, cursos, ebooks, serviços e assinaturas, com uma loja própria para cada negócio.",
   },
   {
@@ -281,7 +281,7 @@ export default function HomePage() {
         </section>
       </main>
       <footer className="mx-auto flex max-w-6xl justify-between px-6 py-10 text-sm text-ink/50">
-        <span>© {new Date().getFullYear()} Trauner</span>
+        <span>© {new Date().getFullYear()} Aluniplace</span>
         <div className="flex gap-4">
           <Link href="/pricing">Planos</Link>
           <Link href="/marketplace">Marketplace</Link>
