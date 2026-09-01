@@ -11,7 +11,7 @@ export default function Page() {
   async function addDomain() {
     if (!store) return;
     await api('/domains', { method: 'POST', body: JSON.stringify({ storeId: store.id, host }) });
-    alert('Domínio adicionado. Configure o DNS para o IP da Trauner e clique em verificar na API.');
+    alert('Domínio adicionado. Configure o DNS para o IP da Aluniplace e clique em verificar na API.');
   }
   return (
     <Shell>

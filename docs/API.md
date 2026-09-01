@@ -1,4 +1,4 @@
-# API Trauner
+# API Aluniplace
 
 Base: `http://localhost:4000/v1`  
 OpenAPI interactivo: `http://localhost:4000/docs`

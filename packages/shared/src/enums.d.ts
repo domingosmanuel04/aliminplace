@@ -1,0 +1,5 @@
+export declare const PRODUCT_TYPES: readonly ["COURSE", "EBOOK", "FILE", "VIDEO", "AUDIO", "SOFTWARE", "SUBSCRIPTION", "COMMUNITY", "MENTORSHIP", "SERVICE", "PHYSICAL"];
+export declare const ORDER_STATUSES: readonly ["AWAITING_PAYMENT", "PAID", "PROCESSING", "PICKED", "SHIPPED", "DELIVERED", "CANCELLED", "RETURNED"];
+export declare const PAYMENT_STATUSES: readonly ["PENDING", "AUTHORIZED", "APPROVED", "FAILED", "REFUNDED", "PARTIALLY_REFUNDED", "CHARGED_BACK"];
+export declare const PAYMENT_METHODS: readonly ["CARD", "TRANSFER", "REFERENCE", "PIX", "WALLET", "CASH_ON_DELIVERY"];
+//# sourceMappingURL=enums.d.ts.map

@@ -1,4 +1,4 @@
-# Trauner
+# Aluniplace
 
 Plataforma SaaS multi-tenant para vender **produtos digitais e físicos**: lojas, checkout, pagamentos, cursos, afiliados, assinaturas e IA de vendas.
 
@@ -33,7 +33,7 @@ pnpm dev
 - Swagger: http://localhost:4000/docs  
 - Health: http://localhost:4000/v1/health  
 
-Portas 5432/6379/9000 estão reservadas noutros projectos nesta máquina — o Compose do Trauner usa **5450 / 6390 / 9020**.
+Portas 5432/6379/9000 estão reservadas noutros projectos nesta máquina — o Compose do Aluniplace usa **5450 / 6390 / 9020**.
 
 ## Contas de demonstração
 

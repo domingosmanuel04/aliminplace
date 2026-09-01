@@ -2,16 +2,98 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
-html, body { background: #F6F1E8; color: #14110F; }
-body { font-family: Outfit, system-ui, sans-serif; }
-h1, h2, .serif { font-family: Fraunces, Georgia, serif; }
-::selection { background: #C4A574; color: #14110F; }
+:root {
+  color-scheme: light;
+  --brand-red: #e31d1d;
+  --brand-red-deep: #b61117;
+  --brand-gray-100: #f3f4f6;
+  --brand-gray-200: #e5e7eb;
+  --brand-text: #1f2937;
+}
 
-.card { @apply bg-white/80 backdrop-blur rounded-2xl border border-black/5 shadow-card; }
-.btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-sm font-medium transition; }
-.btn-primary { @apply btn bg-ink text-cream hover:bg-forest; }
-.btn-gold { @apply btn bg-gold text-ink hover:brightness-95; }
-.btn-ghost { @apply btn border border-ink/15 hover:bg-ink/5; }
-.input { @apply w-full rounded-xl border border-ink/10 bg-white px-3 py-2.5 text-sm outline-none focus:border-gold; }
-.label { @apply text-xs uppercase tracking-wider text-ink/50 mb-1 block; }
+html,
+body {
+  background: var(--brand-gray-100);
+  color: var(--brand-text);
+  overflow-x: hidden;
+}
+
+body {
+  font-family: Outfit, system-ui, sans-serif;
+}
+
+h1,
+h2,
+.serif {
+  font-family: Fraunces, Georgia, serif;
+}
+
+h1,
+h2,
+h3,
+p {
+  overflow-wrap: anywhere;
+}
+
+::selection {
+  background: var(--brand-red);
+  color: white;
+}
+
+.card {
+  @apply bg-white/90 backdrop-blur rounded-2xl border border-black/5 shadow-card;
+}
+
+.btn {
+  @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 py-2.5 text-center text-sm font-medium transition;
+}
+
+.btn-primary {
+  @apply btn bg-[#E31D1D] text-white hover:bg-[#B61117];
+}
+
+.btn-gold {
+  @apply btn bg-[#1E1E1E] text-white hover:bg-[#14110F];
+}
+
+.btn-ghost {
+  @apply btn border border-[#E31D1D]/30 text-[#1F2937] hover:bg-[#E31D1D]/5;
+}
+
+.input {
+  @apply w-full min-w-0 rounded-xl border border-[#E5E7EB] bg-white px-3 py-2.5 text-sm outline-none focus:border-[#E31D1D];
+}
+
+.label {
+  @apply text-xs uppercase tracking-wider text-[#374151] mb-1 block;
+}
+
+.text-brand-red {
+  color: var(--brand-red);
+}
+
+.text-brand-red-deep {
+  color: var(--brand-red-deep);
+}
+
+.bg-brand-red {
+  background: var(--brand-red);
+}
+
+.bg-brand-gray-100 {
+  background: var(--brand-gray-100);
+}
+
+@layer components {
+  .page-container {
+    @apply mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-12;
+  }
+
+  .page-title {
+    @apply serif text-3xl leading-tight sm:text-4xl;
+  }
+
+  .data-table {
+    @apply min-w-[36rem] text-left text-sm;
+  }
+}

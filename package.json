@@ -2,10 +2,11 @@
   "name": "trauner",
   "version": "1.0.0",
   "private": true,
-  "description": "Trauner — plataforma SaaS multi-tenant para vender produtos digitais e físicos",
+  "description": "Aluniplace — plataforma SaaS multi-tenant para vender produtos digitais e físicos",
   "packageManager": "pnpm@9.15.0",
   "scripts": {
     "dev": "turbo dev",
+    "start:project": "pnpm docker:up && pnpm db:migrate && pnpm dev",
     "build": "turbo build",
     "lint": "turbo lint",
     "test": "turbo test",
